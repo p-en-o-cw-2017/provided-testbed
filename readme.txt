@@ -22,9 +22,25 @@ How to use:
 - Autopilot, AutopilotConfig, AutopilotInputs and AutopilotOutputs: these are defined at https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/
 - AutopilotFactory: This class can be specified by you, as long as it contains a method "public static Autopilot createAutopilot()" which creates and returns an autopilot for the testbed to communicate to. This method will be called once when the testbed starts.
 If you're using eclipse, you can create the jar by selecting the classes/packages you wish to export, pressing right-click, selecting "Export...", selecting "JAR file", specifying an export location and exporting with the default settings.
-2) You can now run the testbed from a terminal (in the same directory as both jars) with the following command: "java -cp ProvidedTestbed.jar:<autopilot-library-name.jar> testbed.TestbedGUI
-As an example, you can run the testbed using a simple provided autopilot with the following command: "java -cp ProvidedTestbed.jar:SimpleAutopilot.jar testbed.TestbedGUI"
+2) You can now run the testbed from a terminal (in the same directory as both jars) with the following command:
 
+On Linux and macOS:
+
+    java -cp ProvidedTestbed.jar:<autopilot-library-name.jar> testbed.TestbedGUI
+
+On Windows:
+
+    java -cp ProvidedTestbed.jar;<autopilot-library-name.jar> testbed.TestbedGUI
+
+As an example, you can run the testbed using a simple provided autopilot with the following command:
+
+On Linux and macOS:
+
+    java -cp ProvidedTestbed.jar:SimpleAutopilot.jar testbed.TestbedGUI
+
+On Windows:
+
+    java -cp ProvidedTestbed.jar;SimpleAutopilot.jar testbed.TestbedGUI
 
 Sockets
 
@@ -33,7 +49,17 @@ In this approach the testbed and autopilot run in separate processes and communi
 Although this method has worse performance (~180 UPS using SimpleAutopilot), you have more freedom with the way your autopilot runs.
 
 How to use:
-1) Start the testbed with the command: "java -cp ProvidedTestbed.jar:SimpleAutopilot.jar testbed.TestbedGUI <port>". Make sure to still include the interfaces in the classpath as explained in the Java API communication method (for example by including SimpleAutopilot.jar like in the command), since the linker will need these to execute the program (just to handle the imports, the relevant lines aren't executed if a port command is given). The testbed will now wait for an autopilot to connect to the specified port at localhost and its GUI won't respond.
+1) Start the testbed with the command:
+
+On Linux and macOS:
+
+    java -cp ProvidedTestbed.jar:SimpleAutopilot.jar testbed.TestbedGUI <port>
+
+On Windows:
+
+    java -cp ProvidedTestbed.jar;SimpleAutopilot.jar testbed.TestbedGUI <port>
+
+Make sure to still include the interfaces in the classpath as explained in the Java API communication method (for example by including SimpleAutopilot.jar like in the command), since the linker will need these to execute the program (just to handle the imports, the relevant lines aren't executed if a port command is given). The testbed will now wait for an autopilot to connect to the specified port at localhost and its GUI won't respond.
 2) Start your own autopilot and make sure it connects to the specified port. Communication details are specified above.
 As an example, you can run a simple provided autopilot with the following command: "java -jar SimpleAutopilot.jar <port>"
 
