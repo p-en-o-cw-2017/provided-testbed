@@ -2,7 +2,7 @@ Provided testbed v1.0
 for P&O: CS 2017-2018
 by Wouter Baert
 
-This document should contain all info you may need to demonstrate your autopilot on the provided testbed. Report issues/bugs or suggest improvements at https://github.com/p-en-o-cw-2017/provided-testbed/issues .
+This document should contain all info you may need to demonstrate your autopilot on the provided testbed. Report issues/bugs or suggest improvements at https://github.com/p-en-o-cw-2017/provided-testbed/issues
 
 
 
@@ -65,14 +65,32 @@ As an example, you can run a simple provided autopilot with the following comman
 
 
 
-Controls (custom view)
+Views
 
+
+Custom view
+
+This view allows you to easily position the camera in an arbitrary way as well as do some other stuff. Here are the controls:
 WASD/ZQSD: Move in horizontal plane
 Delete: Remove selected cube.
 Left-click: Drag to move cubes.
 Right-click: Start/end rotation, during rotation you can change the camera direction by moving the mouse.
 Scrolling: While dragging a cube, scroll to adjust the cube-camera distance.
 
+
+Chase cam
+
+In this mode the camera will always be located on the horizontal projection of the drone's positive Z-axis (so not always "intuitively" behind the drone).
+
+
+Orthographic view
+
+These show the part of the world with Z-coordinates in between -20 and 220 along the horizontal direction. The amount of space shown along the vertical direction depends on the canvas size, as this allows us to preserve the in-world aspect ratio. Since the drone model itself would be very small and a bit hard to see in this view, it is represented by a "symbol", namely an enlarged model where its wings span 4m, unless they already span 4m anyway, in which case the model isn't scaled.
+
+
+Autopilot view
+
+The main thing to note about this view is that it simply shows the last image the autopilot (could have) accessed, so it only updates every time a world update is issued, so not based on GUI-induced changes like a change in the camera specification, a change in the cube configuration, ... If the drone is removed it the autopilot view won't be updated anymore either.
 
 
 
@@ -92,7 +110,6 @@ Some further info on specific control panel components:
 - Add cube: adds a single cube at the specified coordinate ("Center X/Y/Z").
 - Generate cube: generates a specified amount of cubes at random positions (uniform distribution) within a specified radius around a specified coordinate ("Center X/Y/Z"). If "Space out cubes" is on, cubes will only be generated at positions where they don't overlap and aren't within 4m of the drone (this is done by trail-and-error, if the generation fails too often it will be aborted and reported to the standard output stream).
 - Generate cubes in cylinder: Generates cubes as specified in M2.3 from the second assignment of the first semester.
-
 
 
 

@@ -1,2 +1,7 @@
 v1.0
 - First version
+v1.1
+- The GUI is now constructed in the AWT event-handling thread is as well (for thread-safety). For the autopilot this means that both AutopilotFactory.createAutopilot() and all Autopilot interface methods are called from the AWT event-handling thread.
+- Updating components now have their preferred size set to their size after initialization. This should stop GUI lay-out from "moving around" due to changes in displayed values.
+- getElapsedTime() now returns the correct value: the amount of time since the start of the simulation, not the amount of time since the last update.
+- Re-added readme sections I accidentally removed earlier.
