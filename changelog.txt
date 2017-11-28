@@ -5,3 +5,6 @@ v1.1
 - Updating components now have their preferred size set to their size after initialization. This should stop GUI lay-out from "moving around" due to changes in displayed values.
 - getElapsedTime() now returns the correct value: the amount of time since the start of the simulation, not the amount of time since the last update.
 - Re-added readme sections I accidentally removed earlier.
+v1.2
+- The testbed now replaces infinite and NaN outputs by zero while printing an error message. Finite thrust outputs outside of the range [0, maxThrust] are still silently capped.
+- You can now pre-define your configuration variables in config.txt, which are loaded by the testbed during initialization. More detailed instructions have been added to the readme.

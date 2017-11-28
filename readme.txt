@@ -65,6 +65,27 @@ As an example, you can run a simple provided autopilot with the following comman
 
 
 
+Pre-defining a custom configuration
+
+When the testbed is started, it loads the values stored in config.txt to initialize the configuration variables, so you can simply edit these values once to always use the right configuration. Like in the GUI, all angles are stored in degrees. They are stored in the order they are shown in the testbed GUI (so first all fields from the first tab from top to bottom, then all fields from the second tab from top to bottom, ...). To be precise, the following order is used:
+- Gravity
+- Maximal thrust
+- Maximal AOA
+- Wing lift slope
+- Horizontal stabilizer lift slope
+- Vertical stabilizer lift slope
+- Initial velocity
+- Wing size
+- Tail size
+- Engine mass
+- Wing mass
+- Tail mass
+- Horizontal FOV
+- Vertical FOV
+- Camera width
+
+
+
 Views
 
 
