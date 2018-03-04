@@ -1,4 +1,4 @@
-Provided testbed v1.0
+Provided testbed
 for P&O: CS 2017-2018
 by Wouter Baert
 
@@ -15,11 +15,11 @@ Java API
 
 In this approach the autopilot is included in the classpath of the testbed upon execution as an external library (with certain requirements which will be specified later). When the testbed initializes, it will use an AutopilotFactory class (specified by you) to instantiate a single autopilot. All further calls will be made using the interfaces.
 
-This method has better performance (~700 UPS using SimpleAutopilot), however since you are in the same process as the testbed it also puts restrictions on how your autopilot runs. Namely, to avoid synchronization and other low-level issues, the testbed is purposefully written in such a way that all our code runs in the AWT event-dispatching thread (even while constructing the GUI). This means that both the AutopilotFactory.createAutopilot() method and all Autopilot and AutopilotOutput methods are called from the AWT event-dispatching thread. This means you can still create your own threads and processes, yet you should watch out that you don't directly or indirectly cause multiple threads to access the same (testbed) data at the same time.
+This method has better performance (~355 UPS using SimpleAutopilot), however since you are in the same process as the testbed it also puts restrictions on how your autopilot runs. Namely, to avoid synchronization and other low-level issues, the testbed is purposefully written in such a way that all our code runs in the AWT event-dispatching thread (even while constructing the GUI). This means that both the AutopilotFactory.createAutopilot() method and all Autopilot and AutopilotOutput methods are called from the AWT event-dispatching thread. This means you can still create your own threads and processes, yet you should make sure that you don't directly or indirectly cause multiple threads to access the same (testbed) data simultaneously.
 
 How to use:
 1) Create a valid autopilot jar. This jar should include a package called "interfaces" which contains the following classes:
-- Autopilot, AutopilotConfig, AutopilotInputs and AutopilotOutputs: these are defined at https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/
+- Autopilot, AutopilotConfig, AutopilotInputs, AutopilotOutputs and Path: these are defined at https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/
 - AutopilotFactory: This class can be specified by you, as long as it contains a method "public static Autopilot createAutopilot()" which creates and returns an autopilot for the testbed to communicate to. This method will be called once when the testbed starts.
 If you're using eclipse, you can create the jar by selecting the classes/packages you wish to export, pressing right-click, selecting "Export...", selecting "JAR file", specifying an export location and exporting with the default settings.
 2) You can now run the testbed from a terminal (in the same directory as both jars) with the following command:
@@ -44,9 +44,9 @@ On Windows:
 
 Sockets
 
-In this approach the testbed and autopilot run in separate processes and communicate through sockets. In this method the testbed is the server, running at localhost with a specified port. Each time you start the testbed at most one autopilot can connect. In this set-up, the only "methods" which are called are those from the Autopilot interface; all other interfaces will have their contents serialized and deserialized as specified by the reader/writer classes at https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/tree/master/autopilot-src-generated. This means that all method calls come from the testbed and go to the autopilot. The testbed will first send a byte indicating what method it is calling (0: simulationStarted, 1: timePassed, 2: simulationEnded), followed by the arguments (serialized interface contents). The testbed will then perform a busy wait until it receives the return value in serialized form. Since currently the only method without return type is simulationEnded, the testbed doesn't need to wait for the autopilot to finish so it continues after sending the 2-byte without the autopilot having to send anything back.
+In this approach the testbed and autopilot run in separate processes and communicate through sockets. In this method the testbed is the server, running at localhost with a specified port. Each time you start the testbed at most one autopilot can connect. In this set-up, the only "methods" which are called are those from the Autopilot interface; all other interfaces will have their contents serialized and deserialized as specified by the reader/writer classes at https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/tree/master/autopilot-src-generated. This means that all method calls come from the testbed and go to the autopilot. The testbed will first send a byte indicating what method it is calling (0: simulationStarted, 1: timePassed, 2: setPath, 3: simulationEnded), followed by the arguments (serialized interface contents). The testbed will then perform a blocking wait until it receives the return value in serialized form. Since setPath doesn't have a return type yet can be called during the simulation, the autopilot should return an arbitrary byte when it has finished handling the call, to indicate that the testbed can continue execution. As simulationEnded is only called at the end of the simulation, the testbed closes the streams immediately after sending the 3-byte so the autopilot shouldn't return anything.
 
-Although this method has worse performance (~180 UPS using SimpleAutopilot), you have more freedom with the way your autopilot runs.
+Although this method has worse performance (~170 UPS using SimpleAutopilot), you have more freedom with the way your autopilot runs.
 
 How to use:
 1) Start the testbed with the command:
@@ -67,22 +67,33 @@ As an example, you can run a simple provided autopilot with the following comman
 
 Pre-defining a custom configuration
 
-When the testbed is started, it loads the values stored in config.txt to initialize the configuration variables, so you can simply edit these values once to always use the right configuration. Like in the GUI, all angles are stored in degrees. They are stored in the order they are shown in the testbed GUI (so first all fields from the first tab from top to bottom, then all fields from the second tab from top to bottom, ...). To be precise, the following order is used:
+When the testbed is started, it loads the values stored in config.txt to initialize the configuration variables, so you can simply edit these values once to always use the right configuration. Like in the GUI, all angles are stored in degrees. They are stored in the following order (based on the AutopilotConfig interface):
+- Drone ID
 - Gravity
+- Wing X
+- Tail size
+- Wheel Y
+- Front wheel Z
+- Rear wheel Z
+- Rear wheel X
+- Tyre slope
+- Damp slope
+- Tyre radius
+- Maximal braking force (per wheel)
+- FcMax
+- Engine mass
+- Wing mass
+- Tail mass
 - Maximal thrust
 - Maximal AOA
 - Wing lift slope
 - Horizontal stabilizer lift slope
 - Vertical stabilizer lift slope
-- Initial velocity
-- Wing size
-- Tail size
-- Engine mass
-- Wing mass
-- Tail mass
-- Horizontal FOV
-- Vertical FOV
+- Horizontal camera field-of-view
+- Vertical camera field-of-view
 - Camera width
+
+Unlike last semester, a default configuration file is provided with somewhat realistic values (as in, they're all either set by the teaching staff, deduced to be good values by the teaching staff or averages from the team's configurations). However, as always you're still free to adjust the values that haven't been set.
 
 
 
@@ -127,7 +138,8 @@ Some further info on specific control panel components:
 - Initial velocity: Will set the velocity of the drone, but only if no time has passed yet.
 - Use new Euler angles: Whether or not to use the Euler angles as defined here: https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/blob/master/Autopilot_v2.datatypes This is recommended since this is the fixed version, this option is mainly provided for backward compatibility.
 - Camera height: Although this value is part of AutopilotConfig, you can't set it since it's already fully determined by the other three camera variables (this one was picked arbitrarily).
-- Show unit vectors: Show the drone's "active" vectors as unit vectors. This is useful since they have different dimensions and their "absolute" size (relative to their respective unit) is fairly meaningless.
+- Show normalized vectors: Show the drone's "active" vectors as vectors of constant length (10m). This is useful since they have different dimensions and their "absolute" size (relative to their respective unit) is fairly meaningless.
+- Set path (in the "Cubes" tab): this calls the setPath method in the Autopilot interface with approximations of all cubes currently present in the world.
 - Add cube: adds a single cube at the specified coordinate ("Center X/Y/Z").
 - Generate cube: generates a specified amount of cubes at random positions (uniform distribution) within a specified radius around a specified coordinate ("Center X/Y/Z"). If "Space out cubes" is on, cubes will only be generated at positions where they don't overlap and aren't within 4m of the drone (this is done by trail-and-error, if the generation fails too often it will be aborted and reported to the standard output stream).
 - Generate cubes in cylinder: Generates cubes as specified in M2.3 from the second assignment of the first semester.
