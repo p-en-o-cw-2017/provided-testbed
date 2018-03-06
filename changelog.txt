@@ -13,3 +13,6 @@ v1.3
 
 v2.0
 - Updated the provided testbed for the second semester assignment.
+v2.1
+- Fixed ProvidedTestbed.jar (forgot to remove some packages).
+- Updated readme with explanation for finite ground.

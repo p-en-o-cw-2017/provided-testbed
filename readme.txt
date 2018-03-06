@@ -126,6 +126,12 @@ The main thing to note about this view is that it simply shows the last image th
 
 
 
+Ground
+
+The ground is represented by a grid of 10m by 10m cells. Unfortunately, since I'm not experienced enough with JOGL to render an infinite surface with a repeating textures, the ground model is finite (and not even very large to prevent lagg) and simply stays roughly under the plane (while always staying aligned to the same grid, so you can still use the ground as a static point of reference of course).
+
+
+
 Control panel
 
 Since there's a lot of fields, not all will be discussed separately in this document. Here are the most important things to know:
