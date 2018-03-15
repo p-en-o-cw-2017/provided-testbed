@@ -143,6 +143,7 @@ Some further info on specific control panel components:
 - Time rate: The ratio inWorldTime/realTime.
 - Initial velocity: Will set the velocity of the drone, but only if no time has passed yet.
 - Use new Euler angles: Whether or not to use the Euler angles as defined here: https://github.com/p-en-o-cw-2017/p-en-o-cw-2017/blob/master/Autopilot_v2.datatypes This is recommended since this is the fixed version, this option is mainly provided for backward compatibility.
+- Fix rear braking axis: If this option is off, the brake force on the rear wheels will be oriented along the projection of the center of the wheel's velocity on the ground (like the front wheel). If this option is on, the brake force on the rear wheels will be oriented along the projection of the drone's Z-axis on the ground. Due to some confusion over this part of the assignment, we decided to include this option.
 - Camera height: Although this value is part of AutopilotConfig, you can't set it since it's already fully determined by the other three camera variables (this one was picked arbitrarily).
 - Show normalized vectors: Show the drone's "active" vectors as vectors of constant length (10m). This is useful since they have different dimensions and their "absolute" size (relative to their respective unit) is fairly meaningless.
 - Set path (in the "Cubes" tab): this calls the setPath method in the Autopilot interface with approximations of all cubes currently present in the world.
