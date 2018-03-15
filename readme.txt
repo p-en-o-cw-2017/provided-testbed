@@ -153,6 +153,14 @@ Some further info on specific control panel components:
 
 
 
+Known issues
+
+At the moment there are a couple of known issues which I don't plan to fix for reasons explained below. I'm sorry for any inconvenience this may cause.
+- Various crashes when exiting the program, causes by low-level libraries. My only guess is that this is caused by the rendering library I use (JOGL), although I'm not aware of any changes I've made to my rendering pipeline, so I have no clue what is causing these issues. Luckily, they don't seem to hinder the program during execution, only when terminating, so the best remedy may be to simply run the provided testbed from a script which automatically removes any unwanted crash logs, suppresses unwanted error output, ...
+- There seems to be a bug on Mac systems when you go to the orthographic view and then back to any other view. However, I can't seem to reproduce this myself (it may be OS-specific) and the orthographic view isn't important in the second semester as far as I know (especially considering how it hasn't been scaled like most other parts of the assignment).
+
+
+
 Attribution
 
 This testbed was made using the following libraries:
