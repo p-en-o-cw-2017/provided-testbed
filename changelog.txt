@@ -18,3 +18,5 @@ v2.1
 - Updated readme with explanation for finite ground.
 v2.2
 - Added option to fix rear wheel braking axis to projection of plane's Z-axis (this used to be the only implementation, now it's opt-in).
+v2.3
+- Slightly changed freeing of resources, hopefully this fixes some crash-y behavior (credits to Joa Oris).
